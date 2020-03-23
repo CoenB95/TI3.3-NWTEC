@@ -3,7 +3,7 @@
 # Run the ifconfig-setup.
 clear
 echo "[1] Setup Ethernet.."
-sudo ./dhcp/eth0-setup.sh
+sudo ./dhcp/ethernet-setup.sh
 sleep 2.0
 
 # Start DHCP for eth1 and eth2.
