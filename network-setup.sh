@@ -1,54 +1,46 @@
 #!/bin/sh
 
-# Optional: sleep on to-fast startup
-# sleep 0.2
-
-# Kill client
-#if [ -f /var/run/udhcpc.eth0.pid ]
-#then
-#  kill `cat /var/run/udhcpc.eth0.pid`
-#    echo Killed eth0 process to be restarted.
-#  sleep 0.1
-#fi
-
-#ifconfig eth0 145.48.205.25 netmask 255.255.255.0 broadcast 145.48.205.255 up
-#echo Activated eth0
-
-# Kill client
-#if [ -f /var/run/udhcpc.eth1.pid ]
-#then
-#  kill `cat /var/run/udhcpc.eth1.pid`
-#  echo Killed eth1 process to be restarted.
-#  sleep 0.1
-#fi
-
-#ifconfig eth1 17.0.0.1 netmask 255.255.255.248 broadcast 17.0.0.15 up
-#echo Activated eth1
-
-# Bla
-#sleep 0.1
-#sudo udhcpd /home/tc/dhcp/dhcp.conf &
-
+# Run the ifconfig-setup.
+clear
 echo "[1] Setup Ethernet.."
 sudo ./dhcp/eth0-setup.sh
+sleep 2.0
 
-echo "[2] Setup DHCP (udhcp).."
+# Start DHCP for eth1 and eth2.
+clear
+echo "[2] Start DHCP (udhcp).."
 sudo udhcpd dhcp/dhcp.conf &
 sudo udhcpd dhcp/dhcp2.conf &
+sleep 2.0
 
-echo "[3] Setup DNS (named;bind9).."
+# Copy latest DNS-files to root-directory.
+clear
+echo "[3] Prepare DNS (copy to /root).."
+echo "Copying..."
+sudo cp -r ./root-bind/ /root/bind/
+echo "Done."
+sleep 1.0
+
+# Start DNS.
+clear
+echo "[4] Setup DNS (named).."
 sudo named -c /root/bind/named.conf -g &
+sleep 4.0
 
-echo "[4] Setup NAT (iptables).."
+# Setup Firewall.
+clear
+echo "[5] Setup NAT (iptables).."
 sudo ./nat/tables-setup.sh
+sleep 2.0
 
-echo "[5] Set default DNS-server to ours.."
+# Fix our own DNS-server reference.
+clear
+echo "[6] Set default DNS-server to ourself.."
 echo "nameserver 10.0.0.1" | sudo tee /etc/resolv.conf
+sleep 2.0
 
-echo "[6] Done."
-
-sleep 5.0
-echo "[7] Status report:"
+clear
+echo "[7] Done. Status report:"
 echo "- IP: " && ifconfig eth0
 echo "- Check DHCP: " && ps | grep dhcp
 echo "- Check DNS: " && ps | grep named
