@@ -8,7 +8,7 @@ for i in $(seq 1 10)
 do
   clear
   echo "[0/7] Cleanup.."
-  ONLINE=${ifconfig eth0 | grep -c 'inet'}
+  ONLINE=$(ifconfig eth0 | grep -c 'inet')
   if [ $ONLINE == 1 ]
   then
     echo "Online!"
