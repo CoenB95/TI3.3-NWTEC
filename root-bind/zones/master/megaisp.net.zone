@@ -1,0 +1,18 @@
+$TTL 86400
+@     IN     SOA    bind1.megaisp.net. hostmaster.megaisp.net. (
+  2020031702  ; serial
+  6H ; refresh after 6 hours
+  1H ; retry after 1 hour
+  1W ; expire after 1 week
+  1D ; minimum TTL of 1 day
+)
+@     IN     NS     bind1.megaisp.net. 
+
+             IN     MX     10     mail.megaisp.net. 
+
+             IN     A       10.0.0.1
+
+router       IN     A       10.0.0.1
+www          IN     A       10.0.0.2
+bind1        IN     A       10.0.0.3
+mail         IN     A       10.0.0.4

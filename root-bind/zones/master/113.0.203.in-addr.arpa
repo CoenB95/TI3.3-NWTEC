@@ -1,0 +1,18 @@
+$TTL 86400
+@     IN     SOA    bind1.megaisp.net.     hostmaster.megaisp.net. (
+  20190514 ; serial
+  6H      ; refresh after 6 hours
+  1H      ; retry after 1 hour
+  1W      ; expire after 1 week
+  1D)     ; minimum TTL of 1 day
+
+  IN     NS     bind1.megaisp.net.
+  IN     NS     bind2.megaisp.net.
+
+  1     IN     PTR    router.megaisp.net.
+  2     IN     PTR    access.megaisp.net.
+  4     IN     PTR    bind1.megaisp.net.
+  5     IN     PTR    bind2.megaisp.net.
+  10    IN     PTR    www.megaisp.net.
+  11    IN     PTR    mail.megaisp.net.
+  12    IN     PTR    ftp.megaisp.net.
