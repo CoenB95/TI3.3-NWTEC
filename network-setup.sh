@@ -53,11 +53,20 @@ sudo ./dhcp/ethernet-setup.sh
 echo -e "\e[32mDone.\e[0m"
 sleep 2.0
 
-# Start DHCP for eth1 and eth2.
+# Start DHCP. Create file to dump leases if it doesn't exist yet.
 clear
 echo -e "\e[94m[2/7] Start DHCP (udhcp)..\e[0m"
+if [ -f /var/lib/misc/dhcp.leases ]
+then
+  echo -e "\e[33m- Dump-file missing; creating file..\e[0m"
+  sleep 1.0
+  sudo mkdir /var/lib/misc
+  sudo touch /var/lib/misc/dhcp.leases
+else
+  echo -e "\e[32m- Dump-file exists\e[0m"
+  sleep 1.0
+fi
 sudo udhcpd -f dhcp/dhcp.conf &
-sudo udhcpd -f dhcp/dhcp2.conf &
 sleep 2.0
 
 # Copy latest DNS-files to root-directory.
