@@ -90,7 +90,7 @@ sleep 2.0
 
 clear
 echo -e "\e[32m[7/7] Done. Status report:\e[0m"
-echo -e "\e[33m- IP: \e[0m" && ifconfig eth0
+echo -e "\e[33m- IP: \e[0m" && ifconfig eth0 | grep -B1 -w inet | awk '{print $1, $2}'
 echo -e "\e[33m- Check DHCP: \e[0m" && ps | grep dhcp
 echo -e "\e[33m- Check DNS: \e[0m" && ps | grep named
 echo -e "\e[33m- Check Firewall: \e[0m" && sudo iptables -L -v
