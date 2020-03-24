@@ -5,12 +5,11 @@ PORT=69
 ROOT_DIR=/remote-boot
 
 # Setup TFTP files
-if [ -e /remote-boot ]
+if [ ! -d "$ROOT_DIR" ]
 then
   echo -e "\e[33m  TFTP directory missing; creating..\e[0m"
   sleep 1.0
-  sudo mkdir /var/lib/misc
-  sudo touch /var/lib/misc/dhcp.leases
+  sudo mkdir $ROOT_DIR
 else
   echo -e "\e[32m  [OK] TFTP directory exists.\e[0m"
   sleep 1.0

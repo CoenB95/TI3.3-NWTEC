@@ -49,7 +49,7 @@ sleep 2.0
 clear
 echo -e "\e[94m[5/6] Set default DNS-server to ourself..\e[0m"
 echo "nameserver 10.0.0.1" | sudo tee /etc/resolv.conf
-echo -e "\e[32mDone.\e[0m"
+echo -e "\e[32m  [OK] Done.\e[0m"
 sleep 2.0
 
 clear
