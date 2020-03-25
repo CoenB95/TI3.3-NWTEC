@@ -14,12 +14,12 @@ echo -e "\e[32m  [OK] Done killing 'udhcpd' processes.\e[0m"
 sleep 2.0
 
 # Start DHCP. Create file to dump leases if it doesn't exist yet.
-if [ -f /var/lib/misc/dhcp.leases ]
+if [ ! -f "/var/lib/misc/dhcp.leases" ]
 then
   echo -e "\e[33m  Dump-file missing; creating file..\e[0m"
-  sleep 1.0
   sudo mkdir /var/lib/misc
   sudo touch /var/lib/misc/dhcp.leases
+  sleep 1.0
 else
   echo -e "\e[32m  [OK] Dump-file exists.\e[0m"
   sleep 1.0
