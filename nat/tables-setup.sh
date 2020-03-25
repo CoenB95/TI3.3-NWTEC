@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Enable Firewall.
-echo 1 > /proc/sys/net/ipv4/ip_forward
+echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
 echo -e "\e[32m  [OK] Enabled firewall.\e[0m"
 
 # Clear any previously applied rules.
