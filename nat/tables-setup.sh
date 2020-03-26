@@ -35,6 +35,7 @@ sudo iptables -A INPUT -p udp --sport 53 -d 10.0.0.0/28 -j ACCEPT			# Allow DNS 
 sudo iptables -A INPUT -p tcp --sport 53 -d 10.0.0.0/28 -j ACCEPT			# Allow DNS requests from anywhere.
 sudo iptables -A INPUT -p udp --dport 53 -d 10.0.0.0/28 -j ACCEPT			# Allow DNS requests from anywhere.
 sudo iptables -A INPUT -p tcp --dport 53 -d 10.0.0.0/28 -j ACCEPT			# Allow DNS requests from anywhere.
+sudo iptables -A INPUT -p udp --dport 67:68 --sport 67:68 -i eth1 -j ACCEPT		# Allow DHCP requests, offers etc in subnet.
 
 sudo iptables -A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT			# Allows SSH connections from anywhere.
 
