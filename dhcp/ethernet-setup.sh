@@ -8,7 +8,7 @@ echo -e "\e[33m  Kill running eth1 processes..\e[0m"
 if [ -f /var/run/udhcpc.eth1.pid ]
 then
   sudo kill `cat /var/run/udhcpc.eth1.pid`
-  echo -e "\e[34  > Killed eth1 process."
+  echo -e "\e[34m  > Killed eth1 process.\e[0m"
   sleep 0.1
 fi
 
