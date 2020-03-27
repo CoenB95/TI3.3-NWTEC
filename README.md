@@ -7,11 +7,12 @@ After flashing PiCore to the gateway, run the following commands to set up neces
 # Follow http://tinycorelinux.net/5.x/armv6/releases/README to enlarge the second partition.
 sudo reboot
 tce-load -wi nano # usefull. Very very usefull
-tce-load -wi git
-tce-load -wi bind
-tce-load -wi iptables
-tce-load -wi net-usb-4.9.22-piCore-v7
-git clone <this-repository>
+tce-load -wi git #to download this repository
+tce-load -wi bind #bind9
+tce-load -wi iptables #nat
+tce-load -wi net-usb-4.9.22-piCore-v7 #driver for usb-ethernet adapters
+tce-load -wi util-linux #losetup used by tftp-setup
+git clone <this-repository> #obvious reasons
 cd TI3.3-NWTEC/gateway
 ./network-setup
 ```
