@@ -36,13 +36,14 @@ sudo iptables -A INPUT -p tcp --sport 53 -d 10.0.0.0/28 -j ACCEPT			# Allow DNS 
 sudo iptables -A INPUT -p udp --dport 53 -d 10.0.0.0/28 -j ACCEPT			# Allow DNS requests from anywhere.
 sudo iptables -A INPUT -p tcp --dport 53 -d 10.0.0.0/28 -j ACCEPT			# Allow DNS requests from anywhere.
 sudo iptables -A INPUT -p udp --dport 67:68 --sport 67:68 -i eth1 -j ACCEPT		# Allow DHCP requests, offers etc in subnet.
+sudo iptables -A INPUT -p udp --dport 69 -i eth1 -j ACCEPT				# Allow TFTP communication in subnet
 
 sudo iptables -A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT			# Allows SSH connections from anywhere.
 
-iptables -N LOGGING
-iptables -A INPUT -j LOGGING
-iptables -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IPTables-Dropped: " --log-level 4
-iptables -A LOGGING -j REJECT   							# Default: reject all inbound traffic.
+sudo iptables -N LOGGING
+sudo iptables -A INPUT -j LOGGING
+sudo iptables -A LOGGING -j LOG --log-prefix "IPTables-Dropped: " --log-level 4
+sudo iptables -A LOGGING -j REJECT   							# Default: reject all inbound traffic.
 
 
 # Define OUTPUT rules
