@@ -29,7 +29,6 @@ else
 fi
 
 echo -e "\e[33m  Removing old files..\e[0m"
-sudo rm ${ROOT_DIR}/bootcode.bin
 sudo rm -r ${ROOT_DIR}/boot
 echo -e "\e[32m  [OK] Cleaning done. TFTP directory should be empty:\e[0m"
 ls -l ${ROOT_DIR}
@@ -65,7 +64,6 @@ sleep 2.0
 
 echo -e "\e[33m  Copying files..\e[0m"
 sudo cp -r ${ROOT_DIR}/temp/boot ${ROOT_DIR} #Note: creates /remote-boot/boot directory on its own.
-sudo cp ${ROOT_DIR}/boot/bootcode.bin ${ROOT_DIR}
 echo -e "\e[32m  [OK] Copying done.\e[0m"
 sleep 2.0
 
@@ -78,9 +76,14 @@ sleep 2.0
 echo -e "\e[33m  Delete temporary files..\e[0m"
 sudo rm -r ${ROOT_DIR}/piCore
 sudo rm -r ${ROOT_DIR}/temp
+sudo rm ${ROOT_DIR}/boot/bootcode.bin
 echo -e "\e[32m  [OK] Done. Files in TFTP-directory:\e[0m"
 ls -l ${ROOT_DIR}
 sleep 2.0
+
+echo "\e[33m  Replacing bootcode.bin with newest from Raspberry..\e[0m"
+sudo wget -P ${ROOT_DIR}/boot https://github.com/raspberrypi/firmware/raw/master/boot/bootcode.bin
+echo -e "\e[32m  [OK] Done.\e[0m"
 
 # Start TFTP Server
 echo -e "\e[32m  [BG] TFTP started.\e[0m"
