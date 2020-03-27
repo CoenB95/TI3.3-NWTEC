@@ -10,6 +10,7 @@ tce-load -wi nano # usefull. Very very usefull
 tce-load -wi git
 tce-load -wi bind
 tce-load -wi iptables
+tce-load -wi net-usb-4.9.22-piCore-v7
 git clone <this-repository>
 cd TI3.3-NWTEC/gateway
 ./network-setup
