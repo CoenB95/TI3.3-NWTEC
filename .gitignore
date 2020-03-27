@@ -1,0 +1,2 @@
+# Ignore dynamicly loaded stuff (wget's etc)
+tslr/snort/community-rules
