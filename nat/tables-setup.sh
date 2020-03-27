@@ -39,8 +39,10 @@ sudo iptables -A INPUT -p udp --dport 67:68 --sport 67:68 -i eth1 -j ACCEPT		# A
 
 sudo iptables -A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT			# Allows SSH connections from anywhere.
 
-sudo iptables -A INPUT -j LOG
-sudo iptables -A INPUT -j REJECT							# Default: reject all inbound traffic.
+iptables -N LOGGING
+iptables -A INPUT -j LOGGING
+iptables -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IPTables-Dropped: " --log-level 4
+iptables -A LOGGING -j REJECT   							# Default: reject all inbound traffic.
 
 
 # Define OUTPUT rules
