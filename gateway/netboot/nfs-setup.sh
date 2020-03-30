@@ -4,7 +4,7 @@ IP=10.0.0.1
 NETBOOT_DIR=/remote-boot
 TFTP_DIR=/remote-boot/boot
 NFS_DIR=/remote-boot/nfs
-DEVICE_KEY=bbe
+DEVICE_KEY=bbbe0e80
 CLIENT_NAME=client1
 
 # Kill all 'udpsvd' process.
@@ -42,6 +42,7 @@ TEST=$(cat /usr/local/etc/exports | grep ${NFS_DIR}/${CLIENT_NAME})
 if [ -z "${TEST}" ]
 then
   echo "${NFS_DIR}/${CLIENT_NAME} *(rw,sync,no_subtree_check,no_root_squash)" | sudo tee -a /usr/local/etc/exports
+  sudo exportfs -a
   echo -e "\e[32m  [OK] Done.\e[0m"
 else
   echo -e "\e[32m  [OK] Already done.\e[0m"
@@ -58,3 +59,7 @@ then
 else
   echo -e "\e[32m  [OK] Already done.\e[0m"
 fi
+sleep 2.0
+
+echo -e "\e[32m  [BG] NFS Started.\e[0m"
+sudo /usr/local/etc/init.d/nfs-server restart

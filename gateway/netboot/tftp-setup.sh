@@ -3,7 +3,7 @@
 IP=10.0.0.1
 PORT=69
 TFTP_DIR=/remote-boot/boot
-DEVICE_KEY=bbe
+DEVICE_KEY=bbbe0e80
 
 # Kill all 'udpsvd' process.
 DHCP_PROCESS=$(ps | grep -m 1 "[u]dpsvd" | awk '{print $1}')
@@ -63,6 +63,7 @@ sudo rm ${TFTP_DIR}/default/bootcode.bin
 sudo rm ${TFTP_DIR}/default/start.elf
 sudo wget -P ${TFTP_DIR}/default https://github.com/raspberrypi/firmware/raw/master/boot/bootcode.bin
 sudo wget -P ${TFTP_DIR}/default https://github.com/raspberrypi/firmware/raw/master/boot/start.elf
+sudo cp ${TFTP_DIR}/default/bootcode.bin ${TFTP_DIR}
 echo -e "\e[32m  [OK] Done.\e[0m"
 
 echo -e "\e[33m  Unmount..\e[0m"

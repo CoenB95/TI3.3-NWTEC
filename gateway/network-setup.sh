@@ -12,10 +12,10 @@ do
   ONLINE=$(ifconfig eth0 | grep -c "inet")
   if [ $ONLINE > 0 ]
   then
-    echo -e "\e[32m  [OK] Online!"
+    echo -e "\e[32m  [OK] Online!\e[0m"
     break
   else
-    echo -e "\e[33m  Waiting for eth0.. ($i/10)"
+    echo -e "\e[33m  Waiting for eth0.. ($i/10)\e[0m"
     sleep 1.0
   fi
 done
