@@ -80,7 +80,7 @@ echo -e "\e[32m  [OK] Done. Files in TFTP-directory:\e[0m"
 ls -l ${ROOT_DIR}
 sleep 2.0
 
-echo "\e[33m  Replacing bootcode.bin with newest from Raspberry..\e[0m"
+echo -e "\e[33m  Replacing bootcode.bin with newest from Raspberry..\e[0m"
 sudo rm ${ROOT_DIR}/boot/bootcode.bin
 sudo rm ${ROOT_DIR}/boot/start.elf
 sudo wget -P ${ROOT_DIR}/boot https://github.com/raspberrypi/firmware/raw/master/boot/bootcode.bin
