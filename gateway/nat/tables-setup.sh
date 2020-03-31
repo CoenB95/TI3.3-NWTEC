@@ -40,13 +40,18 @@ sudo iptables -A INPUT -p udp --dport 69 -i eth1 -j ACCEPT				# Allow TFTP commu
 sudo iptables -A INPUT -p tcp --dport 2049 -i eth1 -j ACCEPT				# Allow NFS communication in subnet
 sudo iptables -A INPUT -p tcp --dport 111 -i eth1 -j ACCEPT				# Allow NFS communication in subnet
 
-# Kill all 'udpsvd' process.
-NFS_PORT=$(rpcinfo -p | grep mountd | grep -m 1 tcp | awk '{print $4}')
-while [ ! -z "${NFS_PORT}" ]
+# # Kill all 'udpsvd' process.
+# NFS_PORT=$(rpcinfo -p | grep mountd | grep -m 1 tcp | awk '{print $4}')
+# while [ ! -z "${NFS_PORT}" ]
+# do
+#   echo -e "\e[34m  > Allow nfs-port ${NFS_PORT}.\e[0m"
+#   sudo iptables -A INPUT -p tcp --dport ${NFS_PORT} -i eth1 -j ACCEPT				# Allow NFS communication in subnet
+#   NFS_PORT=$(rpcinfo -p | grep mountd | grep -m 1 tcp | awk '{print $4}')
+# done
+rpcinfo -p | grep mountd | grep 1 tcp | awk '{print $4}' | while read -r LINE
 do
-  echo -e "\e[34m  > Allow nfs-port ${NFS_PORT}.\e[0m"
-  sudo iptables -A INPUT -p tcp --dport ${NFS_PORT} -i eth1 -j ACCEPT				# Allow NFS communication in subnet
-  NFS_PORT=$(rpcinfo -p | grep mountd | grep -m 1 tcp | awk '{print $4}')
+  # sudo iptables -A INPUT -p tcp --dport ${NFS_PORT} -i eth1 -j ACCEPT
+  echo -e "\e[34m  > Allow nfs-port ${LINE}.\e[0m"
 done
 
 sudo iptables -A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT			# Allows SSH connections from anywhere.
