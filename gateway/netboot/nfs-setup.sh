@@ -49,19 +49,5 @@ else
 fi
 sleep 2.0
 
-echo -e "\e[33m  (${CLIENT_NAME}) LOC..\e[0m"
-TEST=$(cat ${TFTP_DIR}/${DEVICE_KEY}/cmdline.txt | grep nfsroot)
-if [ -z "${TEST}" ]
-then
-  sudo sed -i "s|root=[^ ]*|root=/dev/nfs nfsmount=${IP}:${NFS_DIR}/${CLIENT_NAME},vers=4.1,proto=tcp|g" ${TFTP_DIR}/${DEVICE_KEY}/cmdline.txt
-# sudo sed -i "s|console=ttyS0,115200|console=tty0,115200|g" ${TFTP_DIR}/${DEVICE_KEY}/cmdline.txt
-  sudo sed -i "s|root=[^ ]*|root=/dev/nfs nfsmount=${IP}:${NFS_DIR}/${CLIENT_NAME},vers=4.1,proto=tcp|g" ${TFTP_DIR}/${DEVICE_KEY}/cmdline3.txt
-  sudo sed -i "s|console=ttyS0,115200|console=tty0,115200|g" ${TFTP_DIR}/${DEVICE_KEY}/cmdline3.txt
-  echo -e "\e[32m  [OK] Done.\e[0m"
-else
-  echo -e "\e[32m  [OK] Already done.\e[0m"
-fi
-sleep 2.0
-
 echo -e "\e[32m  [BG] NFS Started.\e[0m"
 sudo /usr/local/etc/init.d/nfs-server restart

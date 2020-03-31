@@ -1,5 +1,6 @@
 #!/bin/sh
 
+DELAY=sleep 1.0
 IP=10.0.0.1
 PORT=69
 TFTP_DIR=/remote-boot/boot
@@ -16,32 +17,33 @@ do
   DHCP_PROCESS=$(ps | grep -m 1 "[u]dpsvd" | awk '{print $1}')
 done
 echo -e "\e[32m  [OK] Done killing 'udpsvd' processes.\e[0m"
-sleep 2.0
+$DELAY
 
 # Setup TFTP files
 echo -e "\e[33m  Removing old files..\e[0m"
 sudo rm -r ${TFTP_DIR}
 echo -e "\e[32m  [OK] Cleaning done.\e[0m"
-sleep 2.0
+$DELAY
 
 echo -e "\e[33m  Downloading PiCore zip..\e[0m"
 sudo mkdir -p ${TFTP_DIR}/piCore
 sudo wget -P ${TFTP_DIR}/piCore http://tinycorelinux.net/9.x/armv6/releases/RPi/piCore-9.0.3.zip
 echo -e "\e[32m  [OK] Downloading done.\e[0m"
-sleep 2.0
+$DELAY
 
 echo -e "\e[33m  Unzipping..\e[0m"
 sudo unzip ${TFTP_DIR}/piCore/piCore-9.0.3.zip -d ${TFTP_DIR}/piCore
 echo -e "\e[32m  [OK] Done. Files:\e[0m"
 ls -l ${TFTP_DIR}/piCore
-sleep 2.0
+$DELAY
 
 echo -e "\e[33m  Loop Device..\e[0m"
 LOOP_LOCATION=$(sudo losetup -f)
 echo -e "\e[34m  > Loopback at $LOOP_LOCATION\e[0m"
 sudo losetup -P -f ${TFTP_DIR}/piCore/piCore-9.0.3.img
+#sudo losetup -P -f ${TFTP_DIR}/piCore/2020-02-13-raspbian-buster-lite.img
 echo -e "\e[32m  [OK] Loop Device ready.\e[0m"
-sleep 2.0
+$DELAY
 
 echo -e "\e[33m  Mount..\e[0m"
 sudo mkdir ${TFTP_DIR}/piCore/boot
@@ -50,33 +52,45 @@ sudo mount ${LOOP_LOCATION}p1 ${TFTP_DIR}/piCore/boot
 sudo mount ${LOOP_LOCATION}p2 ${TFTP_DIR}/piCore/root
 echo -e "\e[32m  [OK] Done. Files in /boot:\e[0m"
 ls -l ${TFTP_DIR}/piCore/boot
-sleep 2.0
+$DELAY
 
 echo -e "\e[33m  Copying files..\e[0m"
 sudo mkdir ${TFTP_DIR}/default
 sudo cp -a ${TFTP_DIR}/piCore/boot/. ${TFTP_DIR}/default
 echo -e "\e[32m  [OK] Copying done.\e[0m"
-sleep 2.0
-
-echo -e "\e[33m  Replacing bootcode.bin with newest from Raspberry..\e[0m"
-sudo rm ${TFTP_DIR}/default/bootcode.bin
-sudo rm ${TFTP_DIR}/default/start.elf
-sudo wget -P ${TFTP_DIR}/default https://github.com/raspberrypi/firmware/raw/master/boot/bootcode.bin
-sudo wget -P ${TFTP_DIR}/default https://github.com/raspberrypi/firmware/raw/master/boot/start.elf
-sudo cp ${TFTP_DIR}/default/bootcode.bin ${TFTP_DIR}
-echo -e "\e[32m  [OK] Done.\e[0m"
+$DELAY
 
 echo -e "\e[33m  Unmount..\e[0m"
 sudo umount ${TFTP_DIR}/piCore/boot
 sudo umount ${TFTP_DIR}/piCore/root
-echo -e "\e[32m  [OK] Done.\e[0m"
-sleep 2.0
-
-echo -e "\e[33m  Delete temporary files..\e[0m"
 sudo rm -r ${TFTP_DIR}/piCore
+echo -e "\e[32m  [OK] Done.\e[0m"
+$DELAY
+
+echo -e "\e[33m  Replacing bootcode.bin with newest from Raspberry..\e[0m"
+sudo rm ${TFTP_DIR}/default/bootcode.bin
+sudo rm ${TFTP_DIR}/default/start.elf
+#sudo rm ${TFTP_DIR}/default/bcm2710-rpi-3-b.dtb
+sudo wget -P ${TFTP_DIR}/default https://github.com/raspberrypi/firmware/raw/master/boot/bootcode.bin
+sudo wget -P ${TFTP_DIR}/default https://github.com/raspberrypi/firmware/raw/master/boot/start.elf
+#sudo wget -P ${TFTP_DIR}/default https://github.com/raspberrypi/firmware/raw/master/boot/bcm2710-rpi-3-b.dtb
+#sudo chmod +x ${TFTP_DIR}/default/bootcode.bin
+#sudo chmod +x ${TFTP_DIR}/default/start.elf
+#sudo chmod +x ${TFTP_DIR}/default/bcm2710-rpi-3-b.dtb
+sudo cp ${TFTP_DIR}/default/bootcode.bin ${TFTP_DIR}
+#sudo cp ${TFTP_DIR}/default/start.elf ${TFTP_DIR}
 echo -e "\e[32m  [OK] Done. Files in TFTP-directory:\e[0m"
 ls -l ${TFTP_DIR}
-sleep 2.0
+$DELAY
+
+echo -e "\e[33m  LOC..\e[0m"
+sudo sed -i "s|root=[^ ]*|root=/dev/ram0 nfsmount=${IP}:${NFS_DIR}/${CLIENT_NAME},vers=4.1,proto=tcp|g" ${TFTP_DIR}/default/cmdline.txt
+# sudo sed -i "s|console=ttyS0,115200|console=tty0,115200|g" ${TFTP_DIR}/default/cmdline.txt
+sudo sed -i "s|root=[^ ]*|root=/dev/ram0 nfsmount=${IP}:${NFS_DIR}/${CLIENT_NAME},vers=4.1,proto=tcp|g" ${TFTP_DIR}/default/cmdline3.txt
+sudo sed -i "s|console=ttyS0,115200|console=tty0,115200|g" ${TFTP_DIR}/default/cmdline3.txt
+echo "boot_delay=1" | sudo tee -a ${TFTP_DIR}/default/config.txt
+echo -e "\e[32m  [OK] Done.\e[0m"
+$DELAY
 
 # For every device:
 
@@ -84,7 +98,7 @@ echo -e "\e[33m  Copying files for device '${DEVICE_KEY}'..\e[0m"
 sudo mkdir ${TFTP_DIR}/${DEVICE_KEY}
 sudo cp -a ${TFTP_DIR}/default/. ${TFTP_DIR}/${DEVICE_KEY}
 echo -e "\e[32m  [OK] Copying done.\e[0m"
-sleep 2.0
+$DELAY
 
 # End for.
 
