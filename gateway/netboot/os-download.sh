@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DELAY=sleep 1.0
+DELAY="sleep 1.0"
 
 OS_NAME=raspbian #picore
 OS_SITE=https://downloads.raspberrypi.org #http://tinycorelinux.net/9.x/armv6/releases/RPi
@@ -31,10 +31,10 @@ echo -e "\e[32m  [OK] Loop Device ready.\e[0m"
 $DELAY
 
 echo -e "\e[33m  Mount..\e[0m"
-sudo mkdir ${OS_DIR}/download/mount-boot
-sudo mkdir ${OS_DIR}/download/mount-root
-sudo mount ${LOOP_LOCATION}p1 ${OS_DIR}/download/mount-boot
-sudo mount ${LOOP_LOCATION}p2 ${OS_DIR}/download/mount-root
+sudo mkdir ${OS_DIR}/download/boot
+sudo mkdir ${OS_DIR}/download/root
+sudo mount ${LOOP_LOCATION}p1 ${OS_DIR}/download/boot
+sudo mount ${LOOP_LOCATION}p2 ${OS_DIR}/download/root
 echo -e "\e[32m  [OK] Done. Files in the mounted boot directory:\e[0m"
 ls -l ${OS_DIR}/download/mount-boot
 $DELAY
@@ -42,14 +42,14 @@ $DELAY
 echo -e "\e[33m  Copying files..\e[0m"
 sudo mkdir ${OS_DIR}/boot
 sudo mkdir ${OS_DIR}/root
-sudo rsync -xa --progress ${OS_DIR}/download/mount-boot / ${OS_DIR}/boot
-sudo rsync -xa --progress ${OS_DIR}/download/mount-root / ${OS_DIR}/root
+sudo rsync -xa ${OS_DIR}/download/boot/ ${OS_DIR}/boot
+sudo rsync -xa ${OS_DIR}/download/root/ ${OS_DIR}/root
 echo -e "\e[32m  [OK] Copying done.\e[0m"
 $DELAY
 
 echo -e "\e[33m  Unmount..\e[0m"
-sudo umount ${OS_DIR}/download/mount-boot
-sudo umount ${OS_DIR}/download/mount-root
+sudo umount ${OS_DIR}/download/boot
+sudo umount ${OS_DIR}/download/root
 sudo rm -r ${OS_DIR}/download
 echo -e "\e[32m  [OK] Done.\e[0m"
 $DELAY
@@ -57,15 +57,16 @@ $DELAY
 # For every device, make a copy of /boot (TFTP).
 echo -e "\e[33m  Copying files for device '${DEVICE_KEY}'..\e[0m"
 sudo mkdir ${OS_DIR}/boot/${DEVICE_KEY}
-sudo rsync -xa --progress --exclude ${OS_DIR}/boot/${DEVICE_KEY} ${OS_DIR}/boot / ${OS_DIR}/boot/${DEVICE_KEY}
+sudo rsync -xa --exclude ${OS_DIR}/boot/${DEVICE_KEY} ${OS_DIR}/boot/ ${OS_DIR}/boot/${DEVICE_KEY}
 echo -e "\e[32m  [OK] Copying done.\e[0m"
 $DELAY
 
 # For every client, make a copy of /root (NFS).
-echo -e "\e[33m  Copying files for client '${CLIENT_NAME}'..\e[0m"
-sudo mkdir ${OS_DIR}/root/${CLIENT_NAME}
-sudo rsync -xa --progress --exclude ${OS_DIR}/root/${CLIENT_NAME} ${OS_DIR}/root / ${OS_DIR}/root/${CLIENT_NAME}
-echo -e "\e[32m  [OK] Copying done.\e[0m"
+# IGNORE FOR NOW: WAY TOO LARGE!
+# echo -e "\e[33m  Copying files for client '${CLIENT_NAME}'..\e[0m"
+# sudo mkdir ${OS_DIR}/root/${CLIENT_NAME}
+# sudo rsync -xa --exclude ${OS_DIR}/root/${CLIENT_NAME} ${OS_DIR}/root/ ${OS_DIR}/root/${CLIENT_NAME}
+# echo -e "\e[32m  [OK] Copying done.\e[0m"
 $DELAY
 
 # For every device, link root to boot.
