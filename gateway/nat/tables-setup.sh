@@ -43,7 +43,7 @@ sudo iptables -A INPUT -p tcp --dport 111 -i eth1 -j ACCEPT				# Allow NFS commu
 # Allow (dynamically created) NFS ports to be reached.
 rpcinfo -p | grep "mountd" | grep "tcp" | awk '{print $4}' | while read -r LINE
 do
-  sudo iptables -A INPUT -p tcp --dport ${NFS_PORT} -i eth1 -j ACCEPT
+  sudo iptables -A INPUT -p tcp --dport ${LINE} -i eth1 -j ACCEPT
   echo -e "\e[34m  > Allow nfs-port ${LINE}.\e[0m"
 done
 
