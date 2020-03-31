@@ -1,11 +1,12 @@
 #!/bin/sh
 
 IP=10.0.0.1
-NETBOOT_DIR=/remote-boot
-TFTP_DIR=/remote-boot/boot
-NFS_DIR=/remote-boot/nfs
-DEVICE_KEY=bbbe0e80
-CLIENT_NAME=client1
+
+OS_NAME=raspbian
+OS_DIR=/mnt/mmcblk0p2/netboot/${OS_NAME}
+NFS_DIR=${OS_DIR}/root
+
+CLIENT_NAME= #client1
 
 # Kill all 'udpsvd' process.
 # DHCP_PROCESS=$(ps | grep -m 1 "[u]dpsvd" | awk '{print $1}')
@@ -19,22 +20,6 @@ CLIENT_NAME=client1
 # done
 # echo -e "\e[32m  [OK] Done killing 'udpsvd' processes.\e[0m"
 # sleep 2.0
-
-# /usr/local/etc/exports
-
-echo -e "\e[33m  Removing old files..\e[0m"
-sudo rm -r ${NFS_DIR}
-echo -e "\e[32m  [OK] Cleaning done.\e[0m"
-sleep 2.0
-
-# Copy /root filesystem
-echo -e "\e[33m  (${CLIENT_NAME}) Copying root directory..\e[0m"
-sudo mkdir -p ${NFS_DIR}/${CLIENT_NAME}
-sudo rsync -xa --exclude ${NETBOOT_DIR} / ${NFS_DIR}/${CLIENT_NAME}
-echo -e "\e[32m  [OK] Done.\e[0m"
-sleep 2.0
-
-# Is chrooting ssh needed?
 
 # NFS Export (?)
 echo -e "\e[33m  (${CLIENT_NAME}) Export NFS details..\e[0m"
