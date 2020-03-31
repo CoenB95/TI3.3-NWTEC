@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DELAY=sleep 2.0
+DELAY="sleep 2.0"
 
 IP=10.0.0.1
 PORT=69

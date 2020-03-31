@@ -26,7 +26,7 @@ echo -e "\e[33m  (${CLIENT_NAME}) Export NFS details..\e[0m"
 TEST=$(cat /usr/local/etc/exports | grep ${NFS_DIR}/${CLIENT_NAME})
 if [ -z "${TEST}" ]
 then
-  echo "${NFS_DIR}/${CLIENT_NAME} *(rw,sync,no_subtree_check,no_root_squash)" | sudo tee -a /usr/local/etc/exports
+  echo "${NFS_DIR}/${CLIENT_NAME} *(rw,sync,no_subtree_check,no_root_squash)" | sudo tee /usr/local/etc/exports
   sudo exportfs -a
   echo -e "\e[32m  [OK] Done.\e[0m"
 else
