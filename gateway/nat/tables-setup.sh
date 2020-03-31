@@ -39,7 +39,15 @@ sudo iptables -A INPUT -p udp --dport 67:68 --sport 67:68 -i eth1 -j ACCEPT		# A
 sudo iptables -A INPUT -p udp --dport 69 -i eth1 -j ACCEPT				# Allow TFTP communication in subnet
 sudo iptables -A INPUT -p tcp --dport 2049 -i eth1 -j ACCEPT				# Allow NFS communication in subnet
 sudo iptables -A INPUT -p tcp --dport 111 -i eth1 -j ACCEPT				# Allow NFS communication in subnet
-sudo iptables -A INPUT -p tcp --dport 59823 -i eth1 -j ACCEPT				# Allow NFS communication in subnet
+
+# Kill all 'udpsvd' process.
+NFS_PORT=$(rpcinfo -p | grep mountd | grep -m 1 tcp | awk '{print $4}')
+while [ ! -z "${NFS_PORT}" ]
+do
+  echo -e "\e[34m  > Allow nfs-port ${NFS_PORT}.\e[0m"
+  sudo iptables -A INPUT -p tcp --dport ${NFS_PORT} -i eth1 -j ACCEPT				# Allow NFS communication in subnet
+  NFS_PORT=$(rpcinfo -p | grep mountd | grep -m 1 tcp | awk '{print $4}')
+done
 
 sudo iptables -A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT			# Allows SSH connections from anywhere.
 
