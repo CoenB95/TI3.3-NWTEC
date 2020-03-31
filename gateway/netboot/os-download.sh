@@ -8,6 +8,7 @@ OS_ZIP=raspbian_lite_latest #piCore-9.0.3.zip
 OS_IMG=2020-02-13-raspbian-buster-lite.img #piCore-9.0.3.img
 OS_DIR=/mnt/mmcblk0p2/netboot/${OS_NAME}
 
+IP=10.0.0.1
 DEVICE_KEY=bbbe0e80
 CLIENT_NAME=tslr
 
@@ -73,5 +74,5 @@ $DELAY
 # Setup the pxelinux.cfg (for RPi that is cmdline.txt)
 echo -e "\e[33m  Edit boot options for netbooting..\e[0m"
 echo -e "\e[34m  > Device '${DEVICE_KEY}' shall load files of client '${CLIENT_NAME}'\e[0m"
-sudo sed -i "s|root=[^ ]*|root=/dev/nfs nfsmount=${IP}:${OS_DIR}/root/${CLIENT_NAME},vers=4.1,proto=tcp|g" ${OS_DIR}/boot/cmdline.txt
+sudo sed -i "s|root=[^ ]*|root=/dev/nfs nfsroot=${IP}:${OS_DIR}/root/${CLIENT_NAME},vers=3,proto=tcp rw ip=dhcp,proto=tcp|g" ${OS_DIR}/boot/${CLIENT_NAME}/cmdline.txt
 echo -e "\e[32m  [OK] Done.\e[0m"
