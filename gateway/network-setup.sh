@@ -40,27 +40,32 @@ echo -e "\e[94m[3/8] Start DNS (named)..\e[0m"
 ./root-bind/bind-setup.sh
 sleep 2.0
 
-# Setup Firewall.
-clear
-echo -e "\e[94m[4/8] Setup NAT (iptables)..\e[0m"
-./nat/tables-setup.sh
-sleep 2.0
-
 # Fix our own DNS-server reference.
 clear
-echo -e "\e[94m[5/8] Set default DNS-server to ourself..\e[0m"
+echo -e "\e[94m[4/8] Set default DNS-server to ourself..\e[0m"
 echo "nameserver 10.0.0.1" | sudo tee /etc/resolv.conf
 echo -e "\e[32m  [OK] Done.\e[0m"
 sleep 2.0
 
+# Optional (once): download the os used for netboot to the sd-card. Is remembered between reboots.
+# ./netboot/os-download.sh
+
+# Start TFTP. Serve the netboot-os' /boot
 clear
-echo -e "\e[94m[6/8] Start TFTP..\e[0m"
+echo -e "\e[94m[5/8] Start TFTP..\e[0m"
 ./netboot/tftp-setup.sh
 sleep 2.0
 
+# Start NFS. Serve the netboot-os' /root
 clear
-echo -e "\e[94m[7/8] Start NFS..\e[0m"
+echo -e "\e[94m[6/8] Start NFS..\e[0m"
 ./netboot/nfs-setup.sh
+sleep 2.0
+
+# Setup Firewall.
+clear
+echo -e "\e[94m[7/8] Setup NAT (iptables)..\e[0m"
+./nat/tables-setup.sh
 sleep 2.0
 
 clear
