@@ -48,7 +48,7 @@ sudo iptables -A INPUT -p tcp --dport 111 -i eth1 -j ACCEPT				# Allow NFS commu
 #   sudo iptables -A INPUT -p tcp --dport ${NFS_PORT} -i eth1 -j ACCEPT				# Allow NFS communication in subnet
 #   NFS_PORT=$(rpcinfo -p | grep mountd | grep -m 1 tcp | awk '{print $4}')
 # done
-rpcinfo -p | grep mountd | grep 1 tcp | awk '{print $4}' | while read -r LINE
+rpcinfo -p | grep mountd | grep tcp | awk '{print $4}' | while read -r LINE
 do
   # sudo iptables -A INPUT -p tcp --dport ${NFS_PORT} -i eth1 -j ACCEPT
   echo -e "\e[34m  > Allow nfs-port ${LINE}.\e[0m"
